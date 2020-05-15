@@ -15,13 +15,15 @@ module.exports = () => {
     const validate = ajv.compile(EmailSchema);
     const valid = validate(req.body);
 
-    if (!valid)
+    if (!valid) {
       return res
         .status(400)
         .json(`missing required parameters ${JSON.stringify(validate.errors)}`);
+    }
 
-    if (_.isEmpty(to) || _.isEmpty(from))
+    if (_.isEmpty(to) || _.isEmpty(from)) {
       return res.status(400).json({ msg: 'To and from fields are required.' });
+    }
 
     const email = {
       to,
@@ -42,9 +44,9 @@ module.exports = () => {
 
       return res
         .status(201)
-        .json({ msg: `E-mail sended successfully.`, email: emailCreated });
+        .json({ msg: 'E-mail sended successfully.', email: emailCreated });
     } catch (error) {
-      return res.status(400).json({ msg: `Error on send e-mail.`, error });
+      return res.status(400).json({ msg: 'Error on send e-mail.', error });
     }
   };
 

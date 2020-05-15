@@ -13,10 +13,11 @@ module.exports = () => {
     const validate = ajv.compile(SmsAnswerSchema);
     const valid = validate(req.body);
 
-    if (!valid)
+    if (!valid) {
       return res
         .status(400)
         .json(`missing required parameters ${JSON.stringify(validate.errors)}`);
+    }
 
     try {
       const data = await totalVoiceClient.sms.enviar(
@@ -27,10 +28,11 @@ module.exports = () => {
         ''
       );
 
-      if (!data || data.sucesso === false)
+      if (!data || data.sucesso === false) {
         return res
           .status(400)
           .json({ msg: 'Ocorreu um erro no envio do SMS', err: data });
+      }
 
       const sms = await SmsModel.create({
         ...req.body,
